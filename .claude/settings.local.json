@@ -26,7 +26,25 @@
       "Bash(node -e \"const b = require\\('C:/Users/User/Hao/Project/PersonalTechnologyStack/portfolio/node_modules/@base-ui/react'\\); console.log\\(Object.keys\\(b.Button || {}\\)\\)\")",
       "Bash(git config:*)",
       "Bash(git add:*)",
-      "Bash(git commit -m ':*)"
+      "Bash(git commit -m ':*)",
+      "Bash(git remote:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "Bash(npx shadcn:*)",
+      "Bash(ls /c/Users/User/Hao/Project/PersonalTechnologyStack/portfolio/.env*)",
+      "Bash(echo \"PID: $!\")",
+      "Bash(curl -s http://localhost:3000/ -o /dev/null -w \"%{http_code}\")",
+      "Bash(curl -s -X POST http://localhost:3000/api/chat -H 'Content-Type: application/json' -d '{\"message\":\"你好，請簡單介紹王之豪的技術背景\"}' --max-time 30)",
+      "Bash(curl -v -X POST http://localhost:3000/api/chat -H 'Content-Type: application/json' -d '{\"message\":\"你好\"}' --max-time 30)",
+      "Bash(curl -v -X POST http://localhost:3000/api/chat -H 'Content-Type: application/json' -d '{\"message\":\"hi\"}' --max-time 15)",
+      "Bash(taskkill /PID 16600 /F)",
+      "Bash(taskkill /PID 849 /F)",
+      "Bash(echo \"started PID $!\")",
+      "Bash(cmd /c \"taskkill /PID 16600 /F\")",
+      "Bash(cmd /c \"taskkill /F /IM node.exe\")",
+      "Bash(curl -s http://localhost:3000 -o /dev/null -w \"%{http_code}\")",
+      "Bash(curl -s -X POST http://localhost:3001/api/chat -H 'Content-Type: application/json' -d '{\"message\":\"你好，請簡單介紹王之豪的技術背景\"}' --max-time 30)"
     ]
   }
 }

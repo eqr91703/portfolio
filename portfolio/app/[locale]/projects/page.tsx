@@ -1,9 +1,11 @@
 import { getTranslations } from 'next-intl/server';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 import { buttonVariants } from '@/components/ui/button';
 import { ExternalLink, GitBranch } from 'lucide-react';
 import { getProjects } from '@/lib/content';
+import { AiShowcase } from '@/components/projects/AiShowcase';
 import type { Metadata } from 'next';
 import type { Locale } from '@/i18n/routing';
 
@@ -82,6 +84,10 @@ export default async function ProjectsPage({
           ))}
         </div>
       )}
+
+      <Separator />
+
+      <AiShowcase />
     </div>
   );
 }
