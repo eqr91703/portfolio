@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm -v)",
+      "Bash(npx create-next-app@latest . --typescript --tailwind --app --no-src-dir --import-alias \"@/*\" --eslint --use-npm)",
+      "Bash(npx create-next-app@latest portfolio --typescript --tailwind --app --no-src-dir --import-alias \"@/*\" --eslint --use-npm)",
+      "Bash(mv content:*)",
+      "Bash(mv public/profile.jpg portfolio/public/profile.jpg)",
+      "Bash(npm install:*)",
+      "Bash(npx shadcn@latest init --yes --defaults)",
+      "Bash(npx shadcn@latest add sheet badge card separator)",
+      "Bash(xargs cat:*)",
+      "Bash(npm run:*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "Bash(curl -s -o /dev/null -w \"/ → %{redirect_url} \\(%{http_code}\\)\\\\n\" http://localhost:3000)",
+      "Bash(curl -s -o /dev/null -w \"/zh-TW → %{http_code}\\\\n\" http://localhost:3000/zh-TW)",
+      "Bash(curl -s -o /dev/null -w \"/en → %{http_code}\\\\n\" http://localhost:3000/en)",
+      "Bash(curl -s -o /dev/null -w \"/zh-TW/cv → %{http_code}\\\\n\" http://localhost:3000/zh-TW/cv)",
+      "Bash(curl -s -o /dev/null -w \"/zh-TW/projects → %{http_code}\\\\n\" http://localhost:3000/zh-TW/projects)",
+      "Bash(curl -s http://localhost:3000/zh-TW)",
+      "Bash(node -e \"const l = require\\('C:/Users/User/Hao/Project/PersonalTechnologyStack/portfolio/node_modules/lucide-react'\\); console.log\\(Object.keys\\(l\\).filter\\(k => /git|linkedin|mail|link|user|home|file|folder/i.test\\(k\\)\\).join\\('\\\\n'\\)\\)\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/zh-TW)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/en)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/zh-TW/cv)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/zh-TW/projects)",
+      "Bash(node -e \"const b = require\\('C:/Users/User/Hao/Project/PersonalTechnologyStack/portfolio/node_modules/@base-ui/react'\\); console.log\\(Object.keys\\(b.Button || {}\\)\\)\")",
+      "Bash(git config:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m ':*)"
+    ]
+  }
+}

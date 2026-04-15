@@ -1,0 +1,52 @@
+{
+  "nav": {
+    "home": "首頁",
+    "cv": "履歷",
+    "projects": "Projects"
+  },
+  "common": {
+    "downloadResume": "下載履歷",
+    "viewOnGithub": "在 GitHub 查看",
+    "viewDemo": "查看 Demo",
+    "switchLang": "EN",
+    "toggleTheme": "切換主題"
+  },
+  "home": {
+    "greeting": "你好，我是",
+    "tagline": "Senior .NET 工程師",
+    "bio": "具八年 C# / .NET 開發經驗，專注於高併發後端系統設計與資料處理效能優化。善用 AI 工具輔助開發，持續追求系統穩定性與團隊效率提升。",
+    "ctaCv": "查看履歷",
+    "ctaProjects": "查看 Projects",
+    "featuredTitle": "核心能力",
+    "card1Title": "後端系統設計",
+    "card1Desc": "8 年 C# / .NET 開發，熟悉高併發、高可用架構，曾負責 12 萬筆/次的高頻交易系統。",
+    "card2Title": "資料庫優化",
+    "card2Desc": "MySQL 索引策略、Partition 分割、Deadlock 排查，以及 Entity Framework ORM 效能調校。",
+    "card3Title": "AWS 雲端部署",
+    "card3Desc": "實際以 ECS + S3 + RDS + CloudWatch 部署分散式應用，具備 AWS SAA 認證。",
+    "card4Title": "AI 工具整合",
+    "card4Desc": "實際建立 AI Agent 專案與資料庫知識庫，使團隊以自然語言查詢系統架構，提升協作效率。"
+  },
+  "cv": {
+    "title": "履歷",
+    "experience": "工作經歷",
+    "skills": "技術能力",
+    "education": "學歷",
+    "certifications": "證照",
+    "softSkills": "軟實力",
+    "downloadPortfolio": "下載完整資料"
+  },
+  "projects": {
+    "title": "Side Projects",
+    "subtitle": "個人專案與開源貢獻",
+    "noProjects": "專案陸續建立中，敬請期待。",
+    "aiShowcaseTitle": "AI 互動展示",
+    "chatTab": "AI 問答",
+    "jobMatchTab": "職缺匹配",
+    "chatPlaceholder": "詢問我的技術背景、工作經歷或技能...",
+    "chatSubmit": "送出",
+    "jobMatchPlaceholder": "貼上職缺 JD，我來評估匹配度...",
+    "jobMatchSubmit": "分析匹配度",
+    "matchScore": "匹配分數"
+  }
+}

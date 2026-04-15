@@ -1,0 +1,52 @@
+{
+  "nav": {
+    "home": "Home",
+    "cv": "CV",
+    "projects": "Projects"
+  },
+  "common": {
+    "downloadResume": "Download Resume",
+    "viewOnGithub": "View on GitHub",
+    "viewDemo": "View Demo",
+    "switchLang": "中文",
+    "toggleTheme": "Toggle Theme"
+  },
+  "home": {
+    "greeting": "Hi, I'm",
+    "tagline": "Senior .NET Engineer",
+    "bio": "8 years of C#/.NET development experience, specializing in high-concurrency backend system design and data processing optimization. Leveraging AI tools to enhance development efficiency and system stability.",
+    "ctaCv": "View CV",
+    "ctaProjects": "View Projects",
+    "featuredTitle": "Core Competencies",
+    "card1Title": "Backend System Design",
+    "card1Desc": "8 years of C#/.NET development, experienced in high-concurrency, high-availability architectures. Led a high-frequency trading system handling 120K records per run.",
+    "card2Title": "Database Optimization",
+    "card2Desc": "MySQL index strategy, table partitioning, Deadlock resolution, and Entity Framework ORM performance tuning.",
+    "card3Title": "AWS Cloud Deployment",
+    "card3Desc": "Deployed distributed applications using ECS + S3 + RDS + CloudWatch. AWS SAA certified.",
+    "card4Title": "AI Tooling Integration",
+    "card4Desc": "Built AI Agent projects and database knowledge bases, enabling teams to query system architecture in natural language."
+  },
+  "cv": {
+    "title": "CV",
+    "experience": "Work Experience",
+    "skills": "Technical Skills",
+    "education": "Education",
+    "certifications": "Certifications",
+    "softSkills": "Soft Skills",
+    "downloadPortfolio": "Download Portfolio"
+  },
+  "projects": {
+    "title": "Side Projects",
+    "subtitle": "Personal Projects & Open Source",
+    "noProjects": "Projects are being built. Stay tuned.",
+    "aiShowcaseTitle": "AI Interactive Demo",
+    "chatTab": "AI Q&A",
+    "jobMatchTab": "Job Match",
+    "chatPlaceholder": "Ask about my tech background, work experience, or skills...",
+    "chatSubmit": "Send",
+    "jobMatchPlaceholder": "Paste a job description to evaluate match...",
+    "jobMatchSubmit": "Analyze Match",
+    "matchScore": "Match Score"
+  }
+}
