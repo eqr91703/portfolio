@@ -44,7 +44,8 @@
       "Bash(cmd /c \"taskkill /PID 16600 /F\")",
       "Bash(cmd /c \"taskkill /F /IM node.exe\")",
       "Bash(curl -s http://localhost:3000 -o /dev/null -w \"%{http_code}\")",
-      "Bash(curl -s -X POST http://localhost:3001/api/chat -H 'Content-Type: application/json' -d '{\"message\":\"你好，請簡單介紹王之豪的技術背景\"}' --max-time 30)"
+      "Bash(curl -s -X POST http://localhost:3001/api/chat -H 'Content-Type: application/json' -d '{\"message\":\"你好，請簡單介紹王之豪的技術背景\"}' --max-time 30)",
+      "Bash(curl -s -X POST http://localhost:3000/api/job-match -H 'Content-Type: application/json' -d '{\"jd\":\"我們正在尋找一位資深後端工程師，需具備 3 年以上 C# .NET 開發經驗，熟悉 AWS 雲端架構，有 MySQL 效能調優經驗，了解 Docker 及 CI/CD 流程。\"}' --max-time 30)"
     ]
   }
 }

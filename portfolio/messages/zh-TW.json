@@ -37,8 +37,8 @@
     "downloadPortfolio": "下載完整資料"
   },
   "projects": {
-    "title": "Side Projects",
-    "subtitle": "個人專案與開源貢獻",
+    "title": "AI 實踐展示",
+    "subtitle": "工作中實際使用 AI 工具的場景記錄",
     "noProjects": "專案陸續建立中，敬請期待。",
     "aiShowcaseTitle": "AI 互動展示",
     "chatTab": "AI 問答",
@@ -47,6 +47,18 @@
     "chatSubmit": "送出",
     "jobMatchPlaceholder": "貼上職缺 JD，我來評估匹配度...",
     "jobMatchSubmit": "分析匹配度",
-    "matchScore": "匹配分數"
+    "matchScore": "匹配分數",
+    "categoryPrompt": "Prompt Engineering",
+    "categoryPromptDesc": "設計結構化 Prompt，讓 AI 穩定輸出可用的工作成果",
+    "categoryAgent": "Agent / Workflow",
+    "categoryAgentDesc": "建立多步驟 AI 工作流，自動化繁瑣的驗證與分析任務",
+    "categoryTooling": "工具整合實例",
+    "categoryToolingDesc": "Claude Code 在 SQL 除錯、文件化與 C# 重構場景的實際應用",
+    "outcomeLabel": "效益",
+    "toolsLabel": "使用工具",
+    "insightsTitle": "Claude Code Insights",
+    "insightsStats": "155 則訊息・19 個 Session・13 次完全達成",
+    "insightsDesc": "Anthropic 生成的 AI 使用分析報告，涵蓋 SQL 優化、DB 工具自動化、C# 重構等真實工作場景。",
+    "insightsViewReport": "查看完整報告"
   }
 }

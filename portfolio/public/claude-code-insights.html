@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Claude Code Insights</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #f8fafc; color: #334155; line-height: 1.65; padding: 48px 24px; }
+    .container { max-width: 800px; margin: 0 auto; }
+    h1 { font-size: 32px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+    h2 { font-size: 20px; font-weight: 600; color: #0f172a; margin-top: 48px; margin-bottom: 16px; }
+    .subtitle { color: #64748b; font-size: 15px; margin-bottom: 32px; }
+    .nav-toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 32px 0; padding: 16px; background: white; border-radius: 8px; border: 1px solid #e2e8f0; }
+    .nav-toc a { font-size: 12px; color: #64748b; text-decoration: none; padding: 6px 12px; border-radius: 6px; background: #f1f5f9; transition: all 0.15s; }
+    .nav-toc a:hover { background: #e2e8f0; color: #334155; }
+    .stats-row { display: flex; gap: 24px; margin-bottom: 40px; padding: 20px 0; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat-value { font-size: 24px; font-weight: 700; color: #0f172a; }
+    .stat-label { font-size: 11px; color: #64748b; text-transform: uppercase; }
+    .at-a-glance { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 1px solid #f59e0b; border-radius: 12px; padding: 20px 24px; margin-bottom: 32px; }
+    .glance-title { font-size: 16px; font-weight: 700; color: #92400e; margin-bottom: 16px; }
+    .glance-sections { display: flex; flex-direction: column; gap: 12px; }
+    .glance-section { font-size: 14px; color: #78350f; line-height: 1.6; }
+    .glance-section strong { color: #92400e; }
+    .see-more { color: #b45309; text-decoration: none; font-size: 13px; white-space: nowrap; }
+    .see-more:hover { text-decoration: underline; }
+    .project-areas { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+    .project-area { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; }
+    .area-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .area-name { font-weight: 600; font-size: 15px; color: #0f172a; }
+    .area-count { font-size: 12px; color: #64748b; background: #f1f5f9; padding: 2px 8px; border-radius: 4px; }
+    .area-desc { font-size: 14px; color: #475569; line-height: 1.5; }
+    .narrative { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 24px; }
+    .narrative p { margin-bottom: 12px; font-size: 14px; color: #475569; line-height: 1.7; }
+    .key-insight { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 12px 16px; margin-top: 12px; font-size: 14px; color: #166534; }
+    .section-intro { font-size: 14px; color: #64748b; margin-bottom: 16px; }
+    .big-wins { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+    .big-win { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 16px; }
+    .big-win-title { font-weight: 600; font-size: 15px; color: #166534; margin-bottom: 8px; }
+    .big-win-desc { font-size: 14px; color: #15803d; line-height: 1.5; }
+    .friction-categories { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
+    .friction-category { background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; padding: 16px; }
+    .friction-title { font-weight: 600; font-size: 15px; color: #991b1b; margin-bottom: 6px; }
+    .friction-desc { font-size: 13px; color: #7f1d1d; margin-bottom: 10px; }
+    .friction-examples { margin: 0 0 0 20px; font-size: 13px; color: #334155; }
+    .friction-examples li { margin-bottom: 4px; }
+    .claude-md-section { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 16px; margin-bottom: 20px; }
+    .claude-md-section h3 { font-size: 14px; font-weight: 600; color: #1e40af; margin: 0 0 12px 0; }
+    .claude-md-actions { margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #dbeafe; }
+    .copy-all-btn { background: #2563eb; color: white; border: none; border-radius: 4px; padding: 6px 12px; font-size: 12px; cursor: pointer; font-weight: 500; transition: all 0.2s; }
+    .copy-all-btn:hover { background: #1d4ed8; }
+    .copy-all-btn.copied { background: #16a34a; }
+    .claude-md-item { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 8px; padding: 10px 0; border-bottom: 1px solid #dbeafe; }
+    .claude-md-item:last-child { border-bottom: none; }
+    .cmd-checkbox { margin-top: 2px; }
+    .cmd-code { background: white; padding: 8px 12px; border-radius: 4px; font-size: 12px; color: #1e40af; border: 1px solid #bfdbfe; font-family: monospace; display: block; white-space: pre-wrap; word-break: break-word; flex: 1; }
+    .cmd-why { font-size: 12px; color: #64748b; width: 100%; padding-left: 24px; margin-top: 4px; }
+    .features-section, .patterns-section { display: flex; flex-direction: column; gap: 12px; margin: 16px 0; }
+    .feature-card { background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 16px; }
+    .pattern-card { background: #f0f9ff; border: 1px solid #7dd3fc; border-radius: 8px; padding: 16px; }
+    .feature-title, .pattern-title { font-weight: 600; font-size: 15px; color: #0f172a; margin-bottom: 6px; }
+    .feature-oneliner { font-size: 14px; color: #475569; margin-bottom: 8px; }
+    .pattern-summary { font-size: 14px; color: #475569; margin-bottom: 8px; }
+    .feature-why, .pattern-detail { font-size: 13px; color: #334155; line-height: 1.5; }
+    .feature-examples { margin-top: 12px; }
+    .feature-example { padding: 8px 0; border-top: 1px solid #d1fae5; }
+    .feature-example:first-child { border-top: none; }
+    .example-desc { font-size: 13px; color: #334155; margin-bottom: 6px; }
+    .example-code-row { display: flex; align-items: flex-start; gap: 8px; }
+    .example-code { flex: 1; background: #f1f5f9; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 12px; color: #334155; overflow-x: auto; white-space: pre-wrap; }
+    .copyable-prompt-section { margin-top: 12px; padding-top: 12px; border-top: 1px solid #e2e8f0; }
+    .copyable-prompt-row { display: flex; align-items: flex-start; gap: 8px; }
+    .copyable-prompt { flex: 1; background: #f8fafc; padding: 10px 12px; border-radius: 4px; font-family: monospace; font-size: 12px; color: #334155; border: 1px solid #e2e8f0; white-space: pre-wrap; line-height: 1.5; }
+    .feature-code { background: #f8fafc; padding: 12px; border-radius: 6px; margin-top: 12px; border: 1px solid #e2e8f0; display: flex; align-items: flex-start; gap: 8px; }
+    .feature-code code { flex: 1; font-family: monospace; font-size: 12px; color: #334155; white-space: pre-wrap; }
+    .pattern-prompt { background: #f8fafc; padding: 12px; border-radius: 6px; margin-top: 12px; border: 1px solid #e2e8f0; }
+    .pattern-prompt code { font-family: monospace; font-size: 12px; color: #334155; display: block; white-space: pre-wrap; margin-bottom: 8px; }
+    .prompt-label { font-size: 11px; font-weight: 600; text-transform: uppercase; color: #64748b; margin-bottom: 6px; }
+    .copy-btn { background: #e2e8f0; border: none; border-radius: 4px; padding: 4px 8px; font-size: 11px; cursor: pointer; color: #475569; flex-shrink: 0; }
+    .copy-btn:hover { background: #cbd5e1; }
+    .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 24px 0; }
+    .chart-card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; }
+    .chart-title { font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase; margin-bottom: 12px; }
+    .bar-row { display: flex; align-items: center; margin-bottom: 6px; }
+    .bar-label { width: 100px; font-size: 11px; color: #475569; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .bar-track { flex: 1; height: 6px; background: #f1f5f9; border-radius: 3px; margin: 0 8px; }
+    .bar-fill { height: 100%; border-radius: 3px; }
+    .bar-value { width: 28px; font-size: 11px; font-weight: 500; color: #64748b; text-align: right; }
+    .empty { color: #94a3b8; font-size: 13px; }
+    .horizon-section { display: flex; flex-direction: column; gap: 16px; }
+    .horizon-card { background: linear-gradient(135deg, #faf5ff 0%, #f5f3ff 100%); border: 1px solid #c4b5fd; border-radius: 8px; padding: 16px; }
+    .horizon-title { font-weight: 600; font-size: 15px; color: #5b21b6; margin-bottom: 8px; }
+    .horizon-possible { font-size: 14px; color: #334155; margin-bottom: 10px; line-height: 1.5; }
+    .horizon-tip { font-size: 13px; color: #6b21a8; background: rgba(255,255,255,0.6); padding: 8px 12px; border-radius: 4px; }
+    .feedback-header { margin-top: 48px; color: #64748b; font-size: 16px; }
+    .feedback-intro { font-size: 13px; color: #94a3b8; margin-bottom: 16px; }
+    .feedback-section { margin-top: 16px; }
+    .feedback-section h3 { font-size: 14px; font-weight: 600; color: #475569; margin-bottom: 12px; }
+    .feedback-card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+    .feedback-card.team-card { background: #eff6ff; border-color: #bfdbfe; }
+    .feedback-card.model-card { background: #faf5ff; border-color: #e9d5ff; }
+    .feedback-title { font-weight: 600; font-size: 14px; color: #0f172a; margin-bottom: 6px; }
+    .feedback-detail { font-size: 13px; color: #475569; line-height: 1.5; }
+    .feedback-evidence { font-size: 12px; color: #64748b; margin-top: 8px; }
+    .fun-ending { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 1px solid #fbbf24; border-radius: 12px; padding: 24px; margin-top: 40px; text-align: center; }
+    .fun-headline { font-size: 18px; font-weight: 600; color: #78350f; margin-bottom: 8px; }
+    .fun-detail { font-size: 14px; color: #92400e; }
+    .collapsible-section { margin-top: 16px; }
+    .collapsible-header { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 12px 0; border-bottom: 1px solid #e2e8f0; }
+    .collapsible-header h3 { margin: 0; font-size: 14px; font-weight: 600; color: #475569; }
+    .collapsible-arrow { font-size: 12px; color: #94a3b8; transition: transform 0.2s; }
+    .collapsible-content { display: none; padding-top: 16px; }
+    .collapsible-content.open { display: block; }
+    .collapsible-header.open .collapsible-arrow { transform: rotate(90deg); }
+    @media (max-width: 640px) { .charts-row { grid-template-columns: 1fr; } .stats-row { justify-content: center; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Claude Code Insights</h1>
+    <p class="subtitle">155 messages across 19 sessions (23 total) | 2026-03-26 to 2026-04-15</p>
+
+    
+    <div class="at-a-glance">
+      <div class="glance-title">At a Glance</div>
+      <div class="glance-sections">
+        <div class="glance-section"><strong>What's working:</strong> You&apos;ve developed a strong diagnostic workflow for production SQL issues—pairing real runtime errors with hypotheses so Claude can confirm root causes quickly, like the nvarchar type conversion bug and the GridReader connection pool exhaustion. You also think in systems: converting a massive SQL schema into structured docs and then building auto-triggered skills to automate your VPN+kubectx DB workflow shows you&apos;re investing in reusable infrastructure rather than one-off fixes. <a href="#section-wins" class="see-more">Impressive Things You Did →</a></div>
+        <div class="glance-section"><strong>What's hindering you:</strong> On Claude&apos;s side, some SQL optimization attempts introduced temp-table rewrites that actually degraded performance and had to be reverted, and parallel sub-agents were spawned too aggressively, triggering rate limits mid-job. On your side, custom skill and environment setup often failed on the first try (skill registration, .env loading order, Windows dev server quirks)—a quick verification step after setup would catch these before they compound. <a href="#section-friction" class="see-more">Where Things Go Wrong →</a></div>
+        <div class="glance-section"><strong>Quick wins to try:</strong> Fix your /db skill—the &apos;Unknown skill&apos; error is almost certainly a placement or frontmatter issue, and since you clearly rely on this workflow, it&apos;s worth 10 minutes to debug. Also consider adding a PostToolUse hook to auto-run builds or EXPLAIN plans after SQL edits, so performance regressions get caught before you commit rather than after rollback. <a href="#section-features" class="see-more">Features to Try →</a></div>
+        <div class="glance-section"><strong>Ambitious workflows:</strong> As models improve, your SQL optimization work is ripe for a closed-loop benchmarking agent: propose 10+ rewrites in parallel, run each against production-like data, auto-revert regressions, and surface only verified wins. Similarly, your 574-doc schema knowledge base could become self-healing—an agent watching for schema drift via your db-schema skill and opening PRs with changelogs, keeping docs perpetually accurate without manual re-runs. <a href="#section-horizon" class="see-more">On the Horizon →</a></div>
+      </div>
+    </div>
+    
+
+    <nav class="nav-toc">
+      <a href="#section-work">What You Work On</a>
+      <a href="#section-usage">How You Use CC</a>
+      <a href="#section-wins">Impressive Things</a>
+      <a href="#section-friction">Where Things Go Wrong</a>
+      <a href="#section-features">Features to Try</a>
+      <a href="#section-patterns">New Usage Patterns</a>
+      <a href="#section-horizon">On the Horizon</a>
+      <a href="#section-feedback">Team Feedback</a>
+    </nav>
+
+    <div class="stats-row">
+      <div class="stat"><div class="stat-value">155</div><div class="stat-label">Messages</div></div>
+      <div class="stat"><div class="stat-value">+6,325/-448</div><div class="stat-label">Lines</div></div>
+      <div class="stat"><div class="stat-value">86</div><div class="stat-label">Files</div></div>
+      <div class="stat"><div class="stat-value">8</div><div class="stat-label">Days</div></div>
+      <div class="stat"><div class="stat-value">19.4</div><div class="stat-label">Msgs/Day</div></div>
+    </div>
+
+    
+    <h2 id="section-work">What You Work On</h2>
+    <div class="project-areas">
+      
+        <div class="project-area">
+          <div class="area-header">
+            <span class="area-name">SQL Optimization &amp; Database Debugging</span>
+            <span class="area-count">~6 sessions</span>
+          </div>
+          <div class="area-desc">User worked extensively on diagnosing SQL issues including type conversion errors, stored procedure debugging, and production timeout investigations. Claude identified root causes like connection pool exhaustion from undisposed GridReaders and nvarchar-to-int conversion bugs. Query optimization attempts had mixed results, with some temp table changes degrading performance and requiring rollbacks.</div>
+        </div>
+      
+        <div class="project-area">
+          <div class="area-header">
+            <span class="area-name">Database Schema Knowledge Base &amp; Custom Skills</span>
+            <span class="area-count">~4 sessions</span>
+          </div>
+          <div class="area-desc">User converted a large SQL schema into 574 structured Markdown docs with domain indexing, then built custom Claude Code skills (db-connect, db-schema, db-select) to automate VPN+kubectx database workflows. Required iteration to fix environment validation, skill registration issues, and reduce agent concurrency due to rate limits.</div>
+        </div>
+      
+        <div class="project-area">
+          <div class="area-header">
+            <span class="area-name">C# Backend Refactoring &amp; API Integration</span>
+            <span class="area-count">~4 sessions</span>
+          </div>
+          <div class="area-desc">User refactored backend code including hierarchy traversal fixes across Dashboard Summary and Hist_Bet methods, migrated new-member queries to use statistics tables, and planned migration of batch club/member creation to a unified API. Claude performed multi-file edits with verified zero-error builds.</div>
+        </div>
+      
+        <div class="project-area">
+          <div class="area-header">
+            <span class="area-name">Portfolio Site Development (Next.js/TypeScript)</span>
+            <span class="area-count">~2 sessions</span>
+          </div>
+          <div class="area-desc">User completed Phases 2-3 of a portfolio site including Vercel deployment and an AI Showcase with chat and job-matching features. Claude debugged a 404 issue caused by next-intl middleware intercepting /api routes and resolved Anthropic client instantiation problems with .env.local loading.</div>
+        </div>
+      
+        <div class="project-area">
+          <div class="area-header">
+            <span class="area-name">CLAUDE.md Configuration &amp; Memory System</span>
+            <span class="area-count">~3 sessions</span>
+          </div>
+          <div class="area-desc">User set up global and project-level CLAUDE.md files covering build commands, architecture, multi-tenant routing, and personal preferences. Claude analyzed codebases to generate configuration and explained the distinction between CLAUDE.md files and Claude&apos;s memory system.</div>
+        </div>
+      
+    </div>
+    
+
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">What You Wanted</div>
+        <div class="bar-row">
+        <div class="bar-label">Code Editing</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#2563eb"></div></div>
+        <div class="bar-value">5</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Sql Optimization</div>
+        <div class="bar-track"><div class="bar-fill" style="width:80%;background:#2563eb"></div></div>
+        <div class="bar-value">4</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Database Query</div>
+        <div class="bar-track"><div class="bar-fill" style="width:60%;background:#2563eb"></div></div>
+        <div class="bar-value">3</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Documentation Generation</div>
+        <div class="bar-track"><div class="bar-fill" style="width:60%;background:#2563eb"></div></div>
+        <div class="bar-value">3</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Database Schema Lookup</div>
+        <div class="bar-track"><div class="bar-fill" style="width:40%;background:#2563eb"></div></div>
+        <div class="bar-value">2</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Technical Question</div>
+        <div class="bar-track"><div class="bar-fill" style="width:40%;background:#2563eb"></div></div>
+        <div class="bar-value">2</div>
+      </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Top Tools Used</div>
+        <div class="bar-row">
+        <div class="bar-label">Bash</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#0891b2"></div></div>
+        <div class="bar-value">191</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Read</div>
+        <div class="bar-track"><div class="bar-fill" style="width:72.25130890052355%;background:#0891b2"></div></div>
+        <div class="bar-value">138</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Edit</div>
+        <div class="bar-track"><div class="bar-fill" style="width:58.63874345549738%;background:#0891b2"></div></div>
+        <div class="bar-value">112</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Write</div>
+        <div class="bar-track"><div class="bar-fill" style="width:37.17277486910995%;background:#0891b2"></div></div>
+        <div class="bar-value">71</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Agent</div>
+        <div class="bar-track"><div class="bar-fill" style="width:25.654450261780106%;background:#0891b2"></div></div>
+        <div class="bar-value">49</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Grep</div>
+        <div class="bar-track"><div class="bar-fill" style="width:16.75392670157068%;background:#0891b2"></div></div>
+        <div class="bar-value">32</div>
+      </div>
+      </div>
+    </div>
+
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">Languages</div>
+        <div class="bar-row">
+        <div class="bar-label">Markdown</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#10b981"></div></div>
+        <div class="bar-value">112</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">TypeScript</div>
+        <div class="bar-track"><div class="bar-fill" style="width:69.64285714285714%;background:#10b981"></div></div>
+        <div class="bar-value">78</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">JSON</div>
+        <div class="bar-track"><div class="bar-fill" style="width:10.714285714285714%;background:#10b981"></div></div>
+        <div class="bar-value">12</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">CSS</div>
+        <div class="bar-track"><div class="bar-fill" style="width:0.8928571428571428%;background:#10b981"></div></div>
+        <div class="bar-value">1</div>
+      </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Session Types</div>
+        <div class="bar-row">
+        <div class="bar-label">Iterative Refinement</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#8b5cf6"></div></div>
+        <div class="bar-value">8</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Multi Task</div>
+        <div class="bar-track"><div class="bar-fill" style="width:50%;background:#8b5cf6"></div></div>
+        <div class="bar-value">4</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Single Task</div>
+        <div class="bar-track"><div class="bar-fill" style="width:50%;background:#8b5cf6"></div></div>
+        <div class="bar-value">4</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Exploration</div>
+        <div class="bar-track"><div class="bar-fill" style="width:25%;background:#8b5cf6"></div></div>
+        <div class="bar-value">2</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Quick Question</div>
+        <div class="bar-track"><div class="bar-fill" style="width:12.5%;background:#8b5cf6"></div></div>
+        <div class="bar-value">1</div>
+      </div>
+      </div>
+    </div>
+
+    
+    <h2 id="section-usage">How You Use Claude Code</h2>
+    <div class="narrative">
+      <p>You operate with a <strong>highly iterative, verification-driven style</strong> that favors rapid back-and-forth over detailed upfront specs. You typically open with a concise problem statement (a SQL error, a 404, a refactor target) and then let Claude explore, but you stay actively engaged—asking follow-up questions like whether row_count could be non-int, then immediately supplying the actual runtime error to sharpen the diagnosis. When optimizations backfired on C04 Query 2 and C06, you didn&apos;t hesitate to <strong>revert and move on</strong>, showing you treat Claude&apos;s output as hypotheses to test rather than final answers. Your heavy Bash (191) and Read (138) usage relative to Write (71) confirms this: you read, verify, and execute far more than you blindly generate.</p>
+<p>You lean heavily on Claude for <strong>infrastructure and workflow automation</strong>—building custom skills for db-connect/db-schema/db-select, generating CLAUDE.md files, converting schemas into 574 structured Markdown docs. When things don&apos;t work (the /db skill failing with &apos;Unknown skill&apos;, kubevpn vs kubectx confusion, an accidentally re-added prod warning), you give <strong>terse corrective feedback</strong> and expect Claude to adjust course without extensive re-specification. The rate-limit incident is telling: rather than abandon the approach, you directly instructed Claude to <strong>throttle concurrency from 10-12 down to 3 batches</strong>, showing you&apos;re comfortable tuning Claude&apos;s execution parameters mid-task.</p>
+<p>You tolerate long agent runs (49 Agent invocations, 286 hours across sessions) but do monitor them—at one point asking if Claude was still working during a slow pause. Your 13/19 fully-achieved rate with minimal dissatisfaction suggests this iterative, trust-but-verify cadence <strong>works well for you</strong>, especially on well-scoped tasks like the Dashboard/Hist_Bet integration or the next-intl middleware fix. You&apos;re less patient with ambiguous or over-engineered attempts, which is why partial failures tend to end in quick rollbacks rather than prolonged debugging sessions.</p>
+      <div class="key-insight"><strong>Key pattern:</strong> You drive tight, verification-heavy iteration loops—submitting focused problems, monitoring execution, and quickly reverting or retuning when Claude&apos;s approach misfires.</div>
+    </div>
+    
+
+    <!-- Response Time Distribution -->
+    <div class="chart-card" style="margin: 24px 0;">
+      <div class="chart-title">User Response Time Distribution</div>
+      <div class="bar-row">
+        <div class="bar-label">2-10s</div>
+        <div class="bar-track"><div class="bar-fill" style="width:28.000000000000004%;background:#6366f1"></div></div>
+        <div class="bar-value">7</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">10-30s</div>
+        <div class="bar-track"><div class="bar-fill" style="width:36%;background:#6366f1"></div></div>
+        <div class="bar-value">9</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">30s-1m</div>
+        <div class="bar-track"><div class="bar-fill" style="width:60%;background:#6366f1"></div></div>
+        <div class="bar-value">15</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">1-2m</div>
+        <div class="bar-track"><div class="bar-fill" style="width:68%;background:#6366f1"></div></div>
+        <div class="bar-value">17</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">2-5m</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#6366f1"></div></div>
+        <div class="bar-value">25</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">5-15m</div>
+        <div class="bar-track"><div class="bar-fill" style="width:60%;background:#6366f1"></div></div>
+        <div class="bar-value">15</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">>15m</div>
+        <div class="bar-track"><div class="bar-fill" style="width:68%;background:#6366f1"></div></div>
+        <div class="bar-value">17</div>
+      </div>
+      <div style="font-size: 12px; color: #64748b; margin-top: 8px;">
+        Median: 160.0s &bull; Average: 378.5s
+      </div>
+    </div>
+
+    <!-- Multi-clauding Section (matching Python reference) -->
+    <div class="chart-card" style="margin: 24px 0;">
+      <div class="chart-title">Multi-Clauding (Parallel Sessions)</div>
+      
+        <p style="font-size: 14px; color: #64748b; padding: 8px 0;">
+          No parallel session usage detected. You typically work with one Claude Code session at a time.
+        </p>
+      
+    </div>
+
+    <!-- Time of Day & Tool Errors -->
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title" style="display: flex; align-items: center; gap: 12px;">
+          User Messages by Time of Day
+          <select id="timezone-select" style="font-size: 12px; padding: 4px 8px; border-radius: 4px; border: 1px solid #e2e8f0;">
+            <option value="0">PT (UTC-8)</option>
+            <option value="3">ET (UTC-5)</option>
+            <option value="8">London (UTC)</option>
+            <option value="9">CET (UTC+1)</option>
+            <option value="17">Tokyo (UTC+9)</option>
+            <option value="custom">Custom offset...</option>
+          </select>
+          <input type="number" id="custom-offset" placeholder="UTC offset" style="display: none; width: 80px; font-size: 12px; padding: 4px; border-radius: 4px; border: 1px solid #e2e8f0;">
+        </div>
+        <div id="hour-histogram">
+      <div class="bar-row">
+        <div class="bar-label">Morning (6-12)</div>
+        <div class="bar-track"><div class="bar-fill" style="width:42.201834862385326%;background:#8b5cf6"></div></div>
+        <div class="bar-value">46</div>
+      </div>
+
+      <div class="bar-row">
+        <div class="bar-label">Afternoon (12-18)</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#8b5cf6"></div></div>
+        <div class="bar-value">109</div>
+      </div>
+
+      <div class="bar-row">
+        <div class="bar-label">Evening (18-24)</div>
+        <div class="bar-track"><div class="bar-fill" style="width:0%;background:#8b5cf6"></div></div>
+        <div class="bar-value">0</div>
+      </div>
+
+      <div class="bar-row">
+        <div class="bar-label">Night (0-6)</div>
+        <div class="bar-track"><div class="bar-fill" style="width:0%;background:#8b5cf6"></div></div>
+        <div class="bar-value">0</div>
+      </div></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Tool Errors Encountered</div>
+        <div class="bar-row">
+        <div class="bar-label">User Rejected</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#dc2626"></div></div>
+        <div class="bar-value">13</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Command Failed</div>
+        <div class="bar-track"><div class="bar-fill" style="width:76.92307692307693%;background:#dc2626"></div></div>
+        <div class="bar-value">10</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Other</div>
+        <div class="bar-track"><div class="bar-fill" style="width:30.76923076923077%;background:#dc2626"></div></div>
+        <div class="bar-value">4</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Edit Failed</div>
+        <div class="bar-track"><div class="bar-fill" style="width:23.076923076923077%;background:#dc2626"></div></div>
+        <div class="bar-value">3</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">File Too Large</div>
+        <div class="bar-track"><div class="bar-fill" style="width:23.076923076923077%;background:#dc2626"></div></div>
+        <div class="bar-value">3</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">File Not Found</div>
+        <div class="bar-track"><div class="bar-fill" style="width:23.076923076923077%;background:#dc2626"></div></div>
+        <div class="bar-value">3</div>
+      </div>
+      </div>
+    </div>
+
+    
+    <h2 id="section-wins">Impressive Things You Did</h2>
+    <p class="section-intro">Over 19 sessions spanning SQL optimization, database tooling, and full-stack deployment, you&apos;ve demonstrated strong engineering instincts and a knack for building reusable workflows.</p>
+    <div class="big-wins">
+      
+        <div class="big-win">
+          <div class="big-win-title">Production SQL Debugging from Errors</div>
+          <div class="big-win-desc">You excel at bringing real runtime errors and production symptoms to Claude for root-cause analysis, like the nvarchar &apos;iiido6&apos; type conversion bug and the SQL timeout traced to undisposed GridReader connection pool exhaustion. Rather than guessing, you pair hypotheses with concrete error data, which lets Claude confirm diagnoses quickly and fix the actual affected files.</div>
+        </div>
+      
+        <div class="big-win">
+          <div class="big-win-title">Automating Your VPN + DB Workflow</div>
+          <div class="big-win-desc">You turned a tedious VPN+kubectx database connection ritual into auto-triggered skills (db-connect, db-schema, db-select) with timeout options and environment validation. By iterating on feedback when the initial VPN checks used the wrong tool, you ended up with a robust, reusable automation layer rather than one-off scripts.</div>
+        </div>
+      
+        <div class="big-win">
+          <div class="big-win-title">Large-Scale Documentation Generation</div>
+          <div class="big-win-desc">You converted a massive SQL schema into 574 structured Markdown docs with a domain index and README, pushing through repeated rate limit interruptions. When parallel sub-agents hit API limits, you course-corrected by asking Claude to drop concurrency from 10-12 down to 3 batches—a pragmatic tuning decision that kept the job moving.</div>
+        </div>
+      
+    </div>
+    
+
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">What Helped Most (Claude's Capabilities)</div>
+        <div class="bar-row">
+        <div class="bar-label">Multi-file Changes</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#16a34a"></div></div>
+        <div class="bar-value">7</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Good Explanations</div>
+        <div class="bar-track"><div class="bar-fill" style="width:71.42857142857143%;background:#16a34a"></div></div>
+        <div class="bar-value">5</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Good Debugging</div>
+        <div class="bar-track"><div class="bar-fill" style="width:57.14285714285714%;background:#16a34a"></div></div>
+        <div class="bar-value">4</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Correct Code Edits</div>
+        <div class="bar-track"><div class="bar-fill" style="width:28.57142857142857%;background:#16a34a"></div></div>
+        <div class="bar-value">2</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Proactive Help</div>
+        <div class="bar-track"><div class="bar-fill" style="width:14.285714285714285%;background:#16a34a"></div></div>
+        <div class="bar-value">1</div>
+      </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Outcomes</div>
+        <div class="bar-row">
+        <div class="bar-label">Partially Achieved</div>
+        <div class="bar-track"><div class="bar-fill" style="width:7.6923076923076925%;background:#8b5cf6"></div></div>
+        <div class="bar-value">1</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Mostly Achieved</div>
+        <div class="bar-track"><div class="bar-fill" style="width:38.46153846153847%;background:#8b5cf6"></div></div>
+        <div class="bar-value">5</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Fully Achieved</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#8b5cf6"></div></div>
+        <div class="bar-value">13</div>
+      </div>
+      </div>
+    </div>
+
+    
+    <h2 id="section-friction">Where Things Go Wrong</h2>
+    <p class="section-intro">Your sessions are generally successful, but you hit recurring friction around parallel execution limits, custom skill configuration, and SQL optimization attempts that degrade performance.</p>
+    <div class="friction-categories">
+      
+        <div class="friction-category">
+          <div class="friction-title">Rate limits from over-parallelized agent work</div>
+          <div class="friction-desc">You repeatedly hit API rate limits because Claude spawned too many concurrent sub-agents, forcing you to manually intervene and request lower concurrency. Setting explicit batch size limits upfront in CLAUDE.md or at task start would prevent these interruptions.</div>
+          <ul class="friction-examples"><li>During the 574-file SQL schema documentation task, rate limits repeatedly interrupted progress until you asked Claude to reduce parallel batches from 10-12 down to 3</li><li>You had to ask &apos;are you still working?&apos; during a long pause, suggesting agent execution stalled without feedback</li></ul>
+        </div>
+      
+        <div class="friction-category">
+          <div class="friction-title">Custom skill and environment setup failures</div>
+          <div class="friction-desc">Your attempts to configure custom skills and local tooling hit several first-attempt failures around file placement, environment loading, and platform-specific behavior. Verifying skill registration and env-loading order before declaring setup complete would save iteration cycles.</div>
+          <ul class="friction-examples"><li>Your /db skill command failed with &apos;Unknown skill: db&apos; due to incorrect file placement or format, blocking usage until fixed</li><li>The Anthropic client was instantiated at module level before .env.local loaded, and Windows dev server process management required manual restarts</li></ul>
+        </div>
+      
+        <div class="friction-category">
+          <div class="friction-title">SQL optimizations that degrade performance</div>
+          <div class="friction-desc">Claude&apos;s proactive SQL rewrites sometimes made queries slower rather than faster, requiring you to roll them back. Asking Claude to benchmark or compare execution plans before committing optimization changes would catch regressions earlier.</div>
+          <ul class="friction-examples"><li>Temp table optimizations for C04 Query 2 and C06 both degraded performance and had to be reverted, wasting the optimization effort</li><li>Claude initially misunderstood &apos;confirm connection&apos; as MCP test_connection instead of kubevpn status, and re-added a prod-copy warning that you had already asked to remove</li></ul>
+        </div>
+      
+    </div>
+    
+
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">Primary Friction Types</div>
+        <div class="bar-row">
+        <div class="bar-label">Rate Limit Hits</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#dc2626"></div></div>
+        <div class="bar-value">6</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Wrong Approach</div>
+        <div class="bar-track"><div class="bar-fill" style="width:66.66666666666666%;background:#dc2626"></div></div>
+        <div class="bar-value">4</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Buggy Code</div>
+        <div class="bar-track"><div class="bar-fill" style="width:33.33333333333333%;background:#dc2626"></div></div>
+        <div class="bar-value">2</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Excessive Changes</div>
+        <div class="bar-track"><div class="bar-fill" style="width:33.33333333333333%;background:#dc2626"></div></div>
+        <div class="bar-value">2</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Misunderstood Request</div>
+        <div class="bar-track"><div class="bar-fill" style="width:33.33333333333333%;background:#dc2626"></div></div>
+        <div class="bar-value">2</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Slow Response</div>
+        <div class="bar-track"><div class="bar-fill" style="width:16.666666666666664%;background:#dc2626"></div></div>
+        <div class="bar-value">1</div>
+      </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Inferred Satisfaction (model-estimated)</div>
+        <div class="bar-row">
+        <div class="bar-label">Dissatisfied</div>
+        <div class="bar-track"><div class="bar-fill" style="width:4.3478260869565215%;background:#eab308"></div></div>
+        <div class="bar-value">2</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Likely Satisfied</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#eab308"></div></div>
+        <div class="bar-value">46</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Satisfied</div>
+        <div class="bar-track"><div class="bar-fill" style="width:15.217391304347828%;background:#eab308"></div></div>
+        <div class="bar-value">7</div>
+      </div>
+      </div>
+    </div>
+
+    
+    
+    <h2 id="section-features">Existing CC Features to Try</h2>
+    <div class="claude-md-section">
+      <h3>Suggested CLAUDE.md Additions</h3>
+      <p style="font-size: 12px; color: #64748b; margin-bottom: 12px;">Just copy this into Claude Code to add it to your CLAUDE.md.</p>
+      <div class="claude-md-actions">
+        <button class="copy-all-btn" onclick="copyAllCheckedClaudeMd()">Copy All Checked</button>
+      </div>
+      
+        <div class="claude-md-item">
+          <input type="checkbox" id="cmd-0" class="cmd-checkbox" checked data-text="Add as a new ## SQL Optimization Rules section near the top of CLAUDE.md, above architecture details\n\n## SQL Optimization Rules
+- Do NOT apply temp table optimizations speculatively; benchmark first or ask before refactoring query structure
+- Always verify with a zero-error build after multi-file SQL/code refactors
+- When fixing timeout/performance issues, check for undisposed GridReader and connection pool exhaustion">
+          <label for="cmd-0">
+            <code class="cmd-code">## SQL Optimization Rules
+- Do NOT apply temp table optimizations speculatively; benchmark first or ask before refactoring query structure
+- Always verify with a zero-error build after multi-file SQL/code refactors
+- When fixing timeout/performance issues, check for undisposed GridReader and connection pool exhaustion</code>
+            <button class="copy-btn" onclick="copyCmdItem(0)">Copy</button>
+          </label>
+          <div class="cmd-why">Multiple sessions showed temp table &apos;optimizations&apos; degrading performance (C04 Q2, C06) requiring rollbacks, and build verification was a consistent success pattern across SQL refactor sessions.</div>
+        </div>
+      
+        <div class="claude-md-item">
+          <input type="checkbox" id="cmd-1" class="cmd-checkbox" checked data-text="Add as a new ## Agent Concurrency section in CLAUDE.md\n\n## Agent Concurrency
+- Limit parallel Task agents to 3 batches maximum to avoid rate limit interruptions
+- For large batch operations (e.g., schema doc generation), process sequentially or in small groups">
+          <label for="cmd-1">
+            <code class="cmd-code">## Agent Concurrency
+- Limit parallel Task agents to 3 batches maximum to avoid rate limit interruptions
+- For large batch operations (e.g., schema doc generation), process sequentially or in small groups</code>
+            <button class="copy-btn" onclick="copyCmdItem(1)">Copy</button>
+          </label>
+          <div class="cmd-why">The user explicitly had to ask Claude to reduce concurrency from 10-12 down to 3 batches, and rate_limit_hits appeared 6 times in friction data—this recurring guidance should be permanent.</div>
+        </div>
+      
+        <div class="claude-md-item">
+          <input type="checkbox" id="cmd-2" class="cmd-checkbox" checked data-text="Add under a ## Database Access section in CLAUDE.md or the relevant project-level CLAUDE.md\n\n## DB Connection Workflow
+- Verify VPN with `kubevpn status` (NOT kubevpn status for cluster check — use kubectx for cluster)
+- Always scope VPN/cluster check to the target environment before running queries
+- Do NOT add prod-copy warning prompts unless explicitly requested">
+          <label for="cmd-2">
+            <code class="cmd-code">## DB Connection Workflow
+- Verify VPN with `kubevpn status` (NOT kubevpn status for cluster check — use kubectx for cluster)
+- Always scope VPN/cluster check to the target environment before running queries
+- Do NOT add prod-copy warning prompts unless explicitly requested</code>
+            <button class="copy-btn" onclick="copyCmdItem(2)">Copy</button>
+          </label>
+          <div class="cmd-why">Session on DB skills showed repeated confusion between kubevpn/kubectx and an accidentally re-added prod warning—documenting this prevents re-introducing these bugs.</div>
+        </div>
+      
+    </div>
+    
+    
+    <p style="font-size: 13px; color: #64748b; margin-bottom: 12px;">Just copy this into Claude Code and it'll set it up for you.</p>
+    <div class="features-section">
+      
+        <div class="feature-card">
+          <div class="feature-title">Custom Skills</div>
+          <div class="feature-oneliner">Reusable markdown-defined commands invoked with /command</div>
+          <div class="feature-why"><strong>Why for you:</strong> You already tried /db but it failed due to incorrect placement. You also built db-connect/db-schema/db-select successfully as auto-triggered skills—formalizing /sql-optimize and /build-verify as skills would capture your recurring SQL refactor + zero-error-build workflow.</div>
+          
+          <div class="feature-examples">
+            <div class="feature-example">
+              <div class="example-code-row">
+                <code class="example-code">mkdir -p .claude/skills/sql-optimize &amp;&amp; cat &gt; .claude/skills/sql-optimize/SKILL.md &lt;&lt;&apos;EOF&apos;
+---
+name: sql-optimize
+description: Optimize SQL queries with benchmark-first approach
+---
+Before applying temp table or CTE rewrites:
+1. Read the target query and reference file if provided
+2. Propose the optimization approach and wait for confirmation
+3. Apply changes to one file first, run build, verify zero errors
+4. Only then propagate to remaining files
+EOF</code>
+                <button class="copy-btn" onclick="copyText(this)">Copy</button>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      
+        <div class="feature-card">
+          <div class="feature-title">Hooks</div>
+          <div class="feature-oneliner">Shell commands auto-run at lifecycle events (e.g., PostToolUse)</div>
+          <div class="feature-why"><strong>Why for you:</strong> Your SQL/TypeScript refactor sessions consistently end with &apos;verified with successful zero-error build&apos;. A PostToolUse hook running your build command after Edit/Write would catch errors immediately instead of relying on Claude remembering to build.</div>
+          
+          <div class="feature-examples">
+            <div class="feature-example">
+              <div class="example-code-row">
+                <code class="example-code">// .claude/settings.json
+{
+  &quot;hooks&quot;: {
+    &quot;PostToolUse&quot;: [{
+      &quot;matcher&quot;: &quot;Edit|Write&quot;,
+      &quot;hooks&quot;: [{&quot;type&quot;: &quot;command&quot;, &quot;command&quot;: &quot;dotnet build --nologo -clp:ErrorsOnly || echo &apos;BUILD FAILED&apos;&quot;}]
+    }]
+  }
+}</code>
+                <button class="copy-btn" onclick="copyText(this)">Copy</button>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      
+        <div class="feature-card">
+          <div class="feature-title">MCP Servers</div>
+          <div class="feature-oneliner">Connect Claude to external tools like databases via Model Context Protocol</div>
+          <div class="feature-why"><strong>Why for you:</strong> You&apos;re manually managing VPN+kubectx+DB connections via custom skills. An MCP SQL Server would give Claude direct, authenticated query access with schema introspection, eliminating the custom skill plumbing and the &apos;test_connection vs kubevpn status&apos; confusion you hit.</div>
+          
+          <div class="feature-examples">
+            <div class="feature-example">
+              <div class="example-code-row">
+                <code class="example-code">claude mcp add mssql -- npx -y @modelcontextprotocol/server-mssql --connection-string &quot;$DB_CONN&quot;</code>
+                <button class="copy-btn" onclick="copyText(this)">Copy</button>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      
+    </div>
+    
+    
+    <h2 id="section-patterns">New Ways to Use Claude Code</h2>
+    <p style="font-size: 13px; color: #64748b; margin-bottom: 12px;">Just copy this into Claude Code and it'll walk you through it.</p>
+    <div class="patterns-section">
+      
+        <div class="pattern-card">
+          <div class="pattern-title">Benchmark before optimizing</div>
+          <div class="pattern-summary">Require a &apos;propose and confirm&apos; step before SQL structural rewrites to avoid rollback cycles.</div>
+          <div class="pattern-detail">You had two clear cases (C04 Q2, C06) where temp-table optimizations degraded performance and had to be reverted. Since you have a C05 reference pattern that worked, treat optimizations as hypotheses, not conclusions. Ask Claude to present the execution plan difference or at least name the expected win before editing, and pilot on one query before batch-applying.</div>
+          
+          <div class="copyable-prompt-section">
+            <div class="prompt-label">Paste into Claude Code:</div>
+            <div class="copyable-prompt-row">
+              <code class="copyable-prompt">Before optimizing this query, compare its structure to the C05 reference. Explain specifically why the optimization will help (index usage, cardinality, seek vs scan), then apply to ONE file only and wait for my benchmark result before continuing.</code>
+              <button class="copy-btn" onclick="copyText(this)">Copy</button>
+            </div>
+          </div>
+          
+        </div>
+      
+        <div class="pattern-card">
+          <div class="pattern-title">Lower default agent concurrency</div>
+          <div class="pattern-summary">Cap parallel Task agents at 3 up front to avoid rate-limit-induced mid-job interruptions.</div>
+          <div class="pattern-detail">With 49 Agent tool uses and 6 rate-limit friction events, you&apos;re hitting concurrency ceilings on large batch jobs like the 574-doc SQL schema export. Declaring the cap at the start of the session (or in CLAUDE.md) is much cheaper than recovering mid-flight when rate limits stall progress.</div>
+          
+          <div class="copyable-prompt-section">
+            <div class="prompt-label">Paste into Claude Code:</div>
+            <div class="copyable-prompt-row">
+              <code class="copyable-prompt">For this batch task, spawn at most 3 parallel Task agents at a time. Process the remaining items sequentially in batches of 3, waiting for each batch to complete before starting the next.</code>
+              <button class="copy-btn" onclick="copyText(this)">Copy</button>
+            </div>
+          </div>
+          
+        </div>
+      
+        <div class="pattern-card">
+          <div class="pattern-title">Fix and reuse the /db skill</div>
+          <div class="pattern-summary">Your failed /db skill suggests a placement/format issue worth fixing since you clearly need this workflow.</div>
+          <div class="pattern-detail">You later built db-connect/db-schema/db-select successfully, but a unified /db was the original goal. Skills must live at `.claude/skills/&lt;name&gt;/SKILL.md` with YAML frontmatter (name, description). Verify both the directory structure and frontmatter—the &apos;Unknown skill&apos; error usually means one of these is off.</div>
+          
+          <div class="copyable-prompt-section">
+            <div class="prompt-label">Paste into Claude Code:</div>
+            <div class="copyable-prompt-row">
+              <code class="copyable-prompt">Audit my .claude/skills directory. For each skill, verify: (1) it lives at .claude/skills/&lt;name&gt;/SKILL.md, (2) has valid YAML frontmatter with name and description, (3) the name matches the directory. Report any issues and fix them.</code>
+              <button class="copy-btn" onclick="copyText(this)">Copy</button>
+            </div>
+          </div>
+          
+        </div>
+      
+    </div>
+    
+    
+
+    
+    <h2 id="section-horizon">On the Horizon</h2>
+    <p class="section-intro">Your usage shows a sophisticated workflow spanning SQL optimization, schema documentation, and custom skill creation—the next frontier is turning these reactive tasks into autonomous, self-validating pipelines.</p>
+    <div class="horizon-section">
+      
+        <div class="horizon-card">
+          <div class="horizon-title">Autonomous SQL Performance Regression Testing</div>
+          <div class="horizon-possible">Instead of manually reverting failed optimizations like C04 Query 2 and C06, imagine an agent that benchmarks every proposed SQL change against production-like data, auto-reverts regressions, and only commits wins. It could run 20 optimization strategies in parallel overnight and present you with verified winners ranked by improvement percentage.</div>
+          <div class="horizon-tip"><strong>Getting started:</strong> Use Claude Code&apos;s Task tool to spawn parallel optimization agents, combined with your existing db-connect/db-select skills to execute EXPLAIN plans and timing benchmarks before/after.</div>
+          <div class="pattern-prompt"><div class="prompt-label">Paste into Claude Code:</div><code>Build an autonomous SQL optimization pipeline as a custom skill. For each stored procedure I specify: (1) capture baseline execution time across 3 runs using db-select, (2) spawn 5 parallel agents each trying a different optimization strategy (indexing hints, temp tables, CTEs, query restructuring, statistics tables), (3) benchmark each variant against baseline with identical inputs, (4) auto-reject any variant that degrades performance or changes result set, (5) produce a ranked report of verified improvements with execution plans. Store results in .claude/sql-benchmarks/ and only apply the winning variant after my approval.</code><button class="copy-btn" onclick="copyText(this)">Copy</button></div>
+        </div>
+      
+        <div class="horizon-card">
+          <div class="horizon-title">Self-Healing Schema Documentation Agent</div>
+          <div class="horizon-possible">Your 574 Markdown schema docs are a goldmine, but they drift the moment DBAs ship changes. An autonomous agent could watch the live schema via your db-schema skill, detect drift nightly, regenerate affected domain docs, and open PRs with changelogs—keeping your knowledge base perpetually accurate without manual re-runs.</div>
+          <div class="horizon-tip"><strong>Getting started:</strong> Combine your existing db-schema skill with a scheduled Claude Code hook or GitHub Action that diffs live schema against committed Markdown and regenerates only changed files in parallel batches of 3 (respecting your rate-limit lessons).</div>
+          <div class="pattern-prompt"><div class="prompt-label">Paste into Claude Code:</div><code>Create a schema-sync skill that: (1) queries INFORMATION_SCHEMA via db-schema to capture current table/proc/function definitions, (2) diffs against my existing /docs/schema/ Markdown files, (3) for each drifted object, spawns a sub-agent to regenerate that specific doc following the existing template, (4) respects rate limits by batching 3 agents max, (5) updates the domain index and README with a changelog section noting additions/removals/modifications, (6) outputs a summary PR description. Make it idempotent and safe to run daily.</code><button class="copy-btn" onclick="copyText(this)">Copy</button></div>
+        </div>
+      
+        <div class="horizon-card">
+          <div class="horizon-title">Test-Driven Refactor Loops With Verification</div>
+          <div class="horizon-possible">For work like the d3 new-member query refactor across multiple files, Claude could operate in a closed loop: write the refactor, run the build, run targeted integration tests against a dev DB, verify row counts match the original query exactly, and only stop when all invariants pass. Zero human babysitting for mechanical multi-file refactors.</div>
+          <div class="horizon-tip"><strong>Getting started:</strong> Leverage the Bash tool for build+test cycles and your db-select skill to assert result-set equivalence between old and new queries as the verification gate.</div>
+          <div class="pattern-prompt"><div class="prompt-label">Paste into Claude Code:</div><code>I want you to refactor [DESCRIBE REFACTOR] across the codebase using a strict test-driven loop. For each file: (1) identify the change, (2) capture current behavior by running the existing query/method against dev DB and hashing the result set, (3) apply the refactor, (4) run dotnet build and fail-fast on errors, (5) re-run the new code and verify result hash matches the baseline, (6) if mismatch, auto-rollback and try a different approach up to 3 times, (7) only proceed to the next file after verification. Produce a final report showing all files changed, build status, and result-equivalence proofs. Do not ask for confirmation between files—run autonomously until complete or stuck.</code><button class="copy-btn" onclick="copyText(this)">Copy</button></div>
+        </div>
+      
+    </div>
+    
+
+    
+    <div class="fun-ending">
+      <div class="fun-headline">"Claude enthusiastically spawned 10-12 parallel agents, promptly hit API rate limits, and got told to calm down to 3"</div>
+      <div class="fun-detail">During the massive SQL schema-to-Markdown conversion task (574 docs), Claude&apos;s over-eager parallelism triggered repeated rate limit hits until the user had to manually dial back concurrency.</div>
+    </div>
+    
+
+    
+  </div>
+  <script>
+    function toggleCollapsible(header) {
+      header.classList.toggle('open');
+      const content = header.nextElementSibling;
+      content.classList.toggle('open');
+    }
+    function copyText(btn) {
+      const code = btn.previousElementSibling;
+      navigator.clipboard.writeText(code.textContent).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+      });
+    }
+    function copyCmdItem(idx) {
+      const checkbox = document.getElementById('cmd-' + idx);
+      if (checkbox) {
+        const text = checkbox.dataset.text;
+        navigator.clipboard.writeText(text).then(() => {
+          const btn = checkbox.nextElementSibling.querySelector('.copy-btn');
+          if (btn) { btn.textContent = 'Copied!'; setTimeout(() => { btn.textContent = 'Copy'; }, 2000); }
+        });
+      }
+    }
+    function copyAllCheckedClaudeMd() {
+      const checkboxes = document.querySelectorAll('.cmd-checkbox:checked');
+      const texts = [];
+      checkboxes.forEach(cb => {
+        if (cb.dataset.text) { texts.push(cb.dataset.text); }
+      });
+      const combined = texts.join('\n');
+      const btn = document.querySelector('.copy-all-btn');
+      if (btn) {
+        navigator.clipboard.writeText(combined).then(() => {
+          btn.textContent = 'Copied ' + texts.length + ' items!';
+          btn.classList.add('copied');
+          setTimeout(() => { btn.textContent = 'Copy All Checked'; btn.classList.remove('copied'); }, 2000);
+        });
+      }
+    }
+    // Timezone selector for time of day chart (data is from our own analytics, not user input)
+    const rawHourCounts = {"9":32,"10":4,"11":10,"12":9,"13":19,"14":23,"15":32,"16":16,"17":10};
+    function updateHourHistogram(offsetFromPT) {
+      const periods = [
+        { label: "Morning (6-12)", range: [6,7,8,9,10,11] },
+        { label: "Afternoon (12-18)", range: [12,13,14,15,16,17] },
+        { label: "Evening (18-24)", range: [18,19,20,21,22,23] },
+        { label: "Night (0-6)", range: [0,1,2,3,4,5] }
+      ];
+      const adjustedCounts = {};
+      for (const [hour, count] of Object.entries(rawHourCounts)) {
+        const newHour = (parseInt(hour) + offsetFromPT + 24) % 24;
+        adjustedCounts[newHour] = (adjustedCounts[newHour] || 0) + count;
+      }
+      const periodCounts = periods.map(p => ({
+        label: p.label,
+        count: p.range.reduce((sum, h) => sum + (adjustedCounts[h] || 0), 0)
+      }));
+      const maxCount = Math.max(...periodCounts.map(p => p.count)) || 1;
+      const container = document.getElementById('hour-histogram');
+      container.textContent = '';
+      periodCounts.forEach(p => {
+        const row = document.createElement('div');
+        row.className = 'bar-row';
+        const label = document.createElement('div');
+        label.className = 'bar-label';
+        label.textContent = p.label;
+        const track = document.createElement('div');
+        track.className = 'bar-track';
+        const fill = document.createElement('div');
+        fill.className = 'bar-fill';
+        fill.style.width = (p.count / maxCount) * 100 + '%';
+        fill.style.background = '#8b5cf6';
+        track.appendChild(fill);
+        const value = document.createElement('div');
+        value.className = 'bar-value';
+        value.textContent = p.count;
+        row.appendChild(label);
+        row.appendChild(track);
+        row.appendChild(value);
+        container.appendChild(row);
+      });
+    }
+    document.getElementById('timezone-select').addEventListener('change', function() {
+      const customInput = document.getElementById('custom-offset');
+      if (this.value === 'custom') {
+        customInput.style.display = 'inline-block';
+        customInput.focus();
+      } else {
+        customInput.style.display = 'none';
+        updateHourHistogram(parseInt(this.value));
+      }
+    });
+    document.getElementById('custom-offset').addEventListener('change', function() {
+      const parsed = parseInt(this.value, 10);
+      if (isNaN(parsed)) return;
+      updateHourHistogram(parsed + 8);
+    });
+  </script>
+</body>
+</html>

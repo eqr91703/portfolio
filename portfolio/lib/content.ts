@@ -104,3 +104,21 @@ export function getProjects(locale: Locale): ProjectEntry[] {
   const { data } = readContent(locale, 'projects.md');
   return (data.entries ?? []) as ProjectEntry[];
 }
+
+// ─── AI Cases ────────────────────────────────────────────────────────────────
+
+export type AiCaseCategory = 'prompt' | 'agent' | 'tooling';
+
+export interface AiCaseEntry {
+  id: string;
+  category: AiCaseCategory;
+  title: string;
+  description: string;
+  tools: string[];
+  outcome?: string;
+}
+
+export function getAiCases(locale: Locale): AiCaseEntry[] {
+  const { data } = readContent(locale, 'ai-cases.md');
+  return (data.entries ?? []) as AiCaseEntry[];
+}
