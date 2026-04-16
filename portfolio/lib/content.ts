@@ -116,6 +116,7 @@ export interface AiCaseEntry {
   description: string;
   tools: string[];
   outcome?: string;
+  github?: string;
 }
 
 export function getAiCases(locale: Locale): AiCaseEntry[] {

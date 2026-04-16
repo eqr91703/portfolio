@@ -7,6 +7,7 @@ entries:
     tools:
       - Claude Code
     outcome: 減少 AI 回應的歧義與錯誤率，沉澱為可複用的 Prompt 設計框架供日常開發使用
+    github: https://github.com/eqr91703/portfolio/tree/main/.claude/skills/prompt-optimizer/SKILL.md
 
   - id: agent-db-connect
     category: agent
@@ -17,6 +18,7 @@ entries:
       - KubeVPN
       - kubectx
     outcome: 省去每次手動切換 K8s context + 建立 VPN 的步驟，並消除因環境切換錯誤導致的誤操作風險
+    github: https://github.com/eqr91703/portfolio/tree/main/.claude/skills/db-connect/SKILL.md
 
   - id: agent-db-schema
     category: agent
@@ -25,6 +27,7 @@ entries:
     tools:
       - Claude Code
     outcome: 新人可直接用中文查詢系統架構，資深工程師被打斷次數明顯降低
+    github: https://github.com/eqr91703/portfolio/tree/main/.claude/skills/db-schema/SKILL.md
 
   - id: agent-db-select
     category: agent
@@ -34,6 +37,7 @@ entries:
       - Claude Code
       - MCP
     outcome: 資料查詢流程標準化，非技術成員亦可安全查詢，消除 SQL 誤操作造成的資料風險
+    github: https://github.com/eqr91703/portfolio/tree/main/.claude/skills/db-select/SKILL.md
 
   - id: tooling-sql-debug
     category: tooling

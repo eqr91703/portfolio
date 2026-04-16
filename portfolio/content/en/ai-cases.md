@@ -7,6 +7,7 @@ entries:
     tools:
       - Claude Code
     outcome: Reduced AI response ambiguity and error rates; distilled into a reusable prompt design framework for daily development
+    github: https://github.com/eqr91703/portfolio/tree/main/.claude/skills/prompt-optimizer/SKILL.md
 
   - id: agent-db-connect
     category: agent
@@ -17,6 +18,7 @@ entries:
       - KubeVPN
       - kubectx
     outcome: Eliminated manual K8s context + VPN setup steps and the risk of environment mix-ups
+    github: https://github.com/eqr91703/portfolio/tree/main/.claude/skills/db-connect/SKILL.md
 
   - id: agent-db-schema
     category: agent
@@ -25,6 +27,7 @@ entries:
     tools:
       - Claude Code
     outcome: New engineers can query system architecture in Chinese; senior engineer interruptions dropped significantly
+    github: https://github.com/eqr91703/portfolio/tree/main/.claude/skills/db-schema/SKILL.md
 
   - id: agent-db-select
     category: agent
@@ -34,6 +37,7 @@ entries:
       - Claude Code
       - MCP
     outcome: Standardized data query process; non-engineers can safely query data, eliminating SQL mishap risk
+    github: https://github.com/eqr91703/portfolio/tree/main/.claude/skills/db-select/SKILL.md
 
   - id: tooling-sql-debug
     category: tooling

@@ -1,11 +1,10 @@
 import { getTranslations } from 'next-intl/server';
-import { useTranslations } from 'next-intl';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { buttonVariants } from '@/components/ui/button';
 import { TimelineItem } from '@/components/cv/TimelineItem';
 import { getExperience, getSkills, getEducation } from '@/lib/content';
-import { Download, Award } from 'lucide-react';
+import { Download, Award, Briefcase, Code2, GraduationCap } from 'lucide-react';
 import type { Metadata } from 'next';
 import type { Locale } from '@/i18n/routing';
 
@@ -17,6 +16,17 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'cv' });
   return { title: `王之豪 | ${t('title')}` };
+}
+
+function SectionHeading({ icon, children }: { icon: React.ReactNode; children: React.ReactNode }) {
+  return (
+    <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+      <span className="inline-flex items-center justify-center h-9 w-9 rounded-lg bg-primary/10 shrink-0">
+        {icon}
+      </span>
+      {children}
+    </h2>
+  );
 }
 
 export default async function CvPage({
@@ -46,7 +56,9 @@ export default async function CvPage({
 
       {/* 工作經歷 */}
       <section>
-        <h2 className="text-2xl font-semibold mb-4">{t('experience')}</h2>
+        <SectionHeading icon={<Briefcase className="h-4 w-4 text-primary" />}>
+          {t('experience')}
+        </SectionHeading>
         <div className="mt-2">
           {experience.map((entry, i) => (
             <TimelineItem
@@ -64,14 +76,22 @@ export default async function CvPage({
 
       {/* 技術能力 */}
       <section>
-        <h2 className="text-2xl font-semibold mb-4">{t('skills')}</h2>
-        <div className="flex flex-col gap-4">
+        <SectionHeading icon={<Code2 className="h-4 w-4 text-primary" />}>
+          {t('skills')}
+        </SectionHeading>
+        <div className="flex flex-col gap-5">
           {skills.categories.map((cat) => (
-            <div key={cat.name}>
-              <p className="text-lg font-medium text-muted-foreground mb-2">{cat.name}</p>
+            <div key={cat.name} className="border-l-2 border-primary/30 pl-4">
+              <p className="text-sm font-semibold text-muted-foreground mb-2 uppercase tracking-wide">
+                {cat.name}
+              </p>
               <div className="flex flex-wrap gap-2">
                 {cat.skills.map((skill) => (
-                  <Badge key={skill} variant="secondary" className="text-base">
+                  <Badge
+                    key={skill}
+                    variant="secondary"
+                    className="text-sm hover:bg-primary/10 hover:text-primary transition-colors duration-150 cursor-default"
+                  >
                     {skill}
                   </Badge>
                 ))}
@@ -86,14 +106,19 @@ export default async function CvPage({
       {/* 證照 */}
       {skills.certifications.length > 0 && (
         <section>
-          <h2 className="text-2xl font-semibold mb-4">{t('certifications')}</h2>
-          <div className="flex flex-col gap-2">
+          <SectionHeading icon={<Award className="h-4 w-4 text-primary" />}>
+            {t('certifications')}
+          </SectionHeading>
+          <div className="flex flex-col gap-3">
             {skills.certifications.map((cert) => (
-              <div key={cert.name} className="flex items-center gap-2">
-                <Award className="h-4 w-4 text-primary shrink-0" />
+              <div
+                key={cert.name}
+                className="flex items-center gap-3 rounded-lg border px-4 py-3 hover:bg-muted/50 transition-colors duration-150"
+              >
+                <Award className="h-5 w-5 text-primary shrink-0" />
                 <div>
-                  <p className="text-xl font-medium">{cert.name}</p>
-                  <p className="text-lg text-muted-foreground">{cert.issuer}</p>
+                  <p className="text-base font-semibold">{cert.name}</p>
+                  <p className="text-sm text-muted-foreground">{cert.issuer}</p>
                 </div>
               </div>
             ))}
@@ -105,7 +130,9 @@ export default async function CvPage({
 
       {/* 學歷 */}
       <section>
-        <h2 className="text-2xl font-semibold mb-4">{t('education')}</h2>
+        <SectionHeading icon={<GraduationCap className="h-4 w-4 text-primary" />}>
+          {t('education')}
+        </SectionHeading>
         <div className="mt-2">
           {education.map((entry, i) => (
             <TimelineItem

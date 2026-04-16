@@ -2,6 +2,8 @@ import { getTranslations } from 'next-intl/server';
 import { getAiCases } from '@/lib/content';
 import { AiCaseSection } from '@/components/projects/AiCaseSection';
 import { InsightsCard } from '@/components/projects/InsightsCard';
+import { Lightbulb, Bot, Wrench } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 import type { Metadata } from 'next';
 import type { Locale } from '@/i18n/routing';
 
@@ -36,11 +38,9 @@ export default async function ProjectsPage({
         <p className="mt-1 text-base text-muted-foreground">{t('subtitle')}</p>
       </div>
 
-      {/* Claude Code Insights 摘要卡片 */}
-      <InsightsCard />
-
       {/* Prompt Engineering */}
       <AiCaseSection
+        icon={<Lightbulb className="h-4 w-4 text-primary" />}
         title={t('categoryPrompt')}
         description={t('categoryPromptDesc')}
         cases={promptCases}
@@ -48,6 +48,7 @@ export default async function ProjectsPage({
 
       {/* Agent / Workflow */}
       <AiCaseSection
+        icon={<Bot className="h-4 w-4 text-primary" />}
         title={t('categoryAgent')}
         description={t('categoryAgentDesc')}
         cases={agentCases}
@@ -55,10 +56,16 @@ export default async function ProjectsPage({
 
       {/* 工具整合實例 */}
       <AiCaseSection
+        icon={<Wrench className="h-4 w-4 text-primary" />}
         title={t('categoryTooling')}
         description={t('categoryToolingDesc')}
         cases={toolingCases}
       />
+
+      <Separator />
+
+      {/* Claude Code Insights 摘要卡片（底部） */}
+      <InsightsCard />
     </div>
   );
 }
