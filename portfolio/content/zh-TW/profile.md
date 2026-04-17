@@ -3,7 +3,7 @@ name: 王之豪
 title: Senior ASP.NET(C#) 軟體工程師
 tagline: "Senior .NET 工程師"
 email: eqr91703@yahoo.com.tw
-github: "https://github.com/eqr91703"
+github: "https://github.com/eqr91703/portfolio"
 linkedin: "https://www.linkedin.com/in/haowang-0517ab390"
 location: "Taiwan"
 ---

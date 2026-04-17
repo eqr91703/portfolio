@@ -1,9 +1,9 @@
 ---
 name: "Chih-Hao Wang"
 title: Senior ASP.NET(C#) Software Engineer
-tagline: "Senior .NET Engineer · AI Tooling Practitioner"
+tagline: "Senior .NET Engineer"
 email: eqr91703@yahoo.com.tw
-github: "https://github.com/eqr91703"
+github: "https://github.com/eqr91703/portfolio"
 linkedin: "https://www.linkedin.com/in/haowang-0517ab390"
 location: "Taiwan"
 ---

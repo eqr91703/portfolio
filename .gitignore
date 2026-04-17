@@ -29,3 +29,6 @@ yarn-error.log*
 
 # Planning / personal notes（不上傳至 GitHub）
 *.pdf
+
+# Claude Code local settings
+.claude/settings.local.json
