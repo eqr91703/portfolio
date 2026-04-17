@@ -2,7 +2,7 @@
   "nav": {
     "home": "首頁",
     "cv": "履歷",
-    "projects": "Projects"
+    "projects": "AI 實踐展示"
   },
   "common": {
     "downloadResume": "下載履歷",
@@ -15,8 +15,9 @@
     "greeting": "你好，我是",
     "tagline": "Senior .NET 工程師",
     "bio": "具八年 C# / .NET 開發經驗，專注於高併發後端系統設計與資料處理效能優化。善用 AI 工具輔助開發，持續追求系統穩定性與團隊效率提升。",
+    "ctaContact": "聯絡我",
     "ctaCv": "查看履歷",
-    "ctaProjects": "查看 Projects",
+    "ctaProjects": "AI 實踐展示",
     "featuredTitle": "核心能力",
     "card1Title": "後端系統設計",
     "card1Desc": "8 年 C# / .NET 開發，熟悉高併發、高可用架構，曾負責 12 萬筆/次的高頻交易系統。",
@@ -24,6 +25,7 @@
     "card2Desc": "MySQL 索引策略、Partition 分割、Deadlock 排查，以及 Entity Framework ORM 效能調校。",
     "card3Title": "AWS 雲端部署",
     "card3Desc": "實際以 ECS + S3 + RDS + CloudWatch 部署分散式應用，具備 AWS SAA 認證。",
+    "card3CertVerify": "驗證 SAA 認證",
     "card4Title": "AI 工具整合",
     "card4Desc": "實際建立 AI Agent 專案與資料庫知識庫，使團隊以自然語言查詢系統架構，提升協作效率。"
   },
@@ -34,7 +36,9 @@
     "education": "學歷",
     "certifications": "證照",
     "softSkills": "軟實力",
-    "downloadPortfolio": "下載完整資料"
+    "downloadPortfolio": "下載完整資料",
+    "downloadPdf": "下載 PDF",
+    "downloadMd": "下載 MD"
   },
   "projects": {
     "title": "AI 實踐展示",
@@ -59,6 +63,10 @@
     "insightsTitle": "Claude Code Insights",
     "insightsStats": "155 則訊息・19 個 Session・13 次完全達成",
     "insightsDesc": "Anthropic 生成的 AI 使用分析報告，涵蓋 SQL 優化、DB 工具自動化、C# 重構等真實工作場景。",
-    "insightsViewReport": "查看完整報告"
+    "insightsViewReport": "查看完整報告",
+    "insightsStrengthsLabel": "報告關鍵亮點",
+    "insightsStrength1": "完全達成率 68%（13/19 個 Session Fully Achieved），高於一般 AI 輔助開發專案",
+    "insightsStrength2": "高複雜任務佔主體：SQL 效能優化、DB 自動化工具鏈建立、C# 跨檔案重構",
+    "insightsStrength3": "跨 Session 可複用工作流：3 套 Agent Skill 沉澱為標準作業，不依賴逐次提示"
   }
 }

@@ -50,6 +50,7 @@ categories:
 certifications:
   - name: AWS Certified Solutions Architect – Associate
     issuer: Amazon Web Services
+    url: https://cp.certmetrics.com/amazon/zh-Hant/public/verify/credential/SJEQXEQCTBE118GK
 
 soft_skills:
   - Strong Communication Skills

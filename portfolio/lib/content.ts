@@ -59,9 +59,15 @@ export interface SkillCategory {
   skills: string[];
 }
 
+export interface CertificationEntry {
+  name: string;
+  issuer: string;
+  url?: string;
+}
+
 export interface SkillsData {
   categories: SkillCategory[];
-  certifications: { name: string; issuer: string }[];
+  certifications: CertificationEntry[];
   soft_skills: string[];
 }
 

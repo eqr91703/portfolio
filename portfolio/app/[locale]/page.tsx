@@ -3,7 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { buttonVariants } from '@/components/ui/button';
-import { FileText, Folder, Server, Database, Cloud, Bot } from 'lucide-react';
+import { FileText, Folder, Server, Database, Cloud, Bot, Mail, ExternalLink } from 'lucide-react';
 import type { Metadata } from 'next';
 import type { Locale } from '@/i18n/routing';
 
@@ -44,7 +44,14 @@ export default function HomePage() {
           {t('bio')}
         </p>
         <div className="flex gap-3 flex-wrap mt-2">
-          <Link href="/cv" className={buttonVariants({ variant: 'default' })}>
+          <a
+            href="mailto:eqr91703@gmail.com"
+            className={buttonVariants({ variant: 'default' })}
+          >
+            <Mail className="h-4 w-4 mr-2" />
+            {t('ctaContact')}
+          </a>
+          <Link href="/cv" className={buttonVariants({ variant: 'outline' })}>
             <FileText className="h-4 w-4 mr-2" />
             {t('ctaCv')}
           </Link>
@@ -67,10 +74,21 @@ export default function HomePage() {
                   {t(`${key}Title` as Parameters<typeof t>[0])}
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="flex flex-col gap-2">
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   {t(`${key}Desc` as Parameters<typeof t>[0])}
                 </p>
+                {key === 'card3' && (
+                  <a
+                    href="https://cp.certmetrics.com/amazon/zh-Hant/public/verify/credential/SJEQXEQCTBE118GK"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                  >
+                    <ExternalLink className="h-3 w-3" />
+                    {t('card3CertVerify')}
+                  </a>
+                )}
               </CardContent>
             </Card>
           ))}

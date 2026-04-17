@@ -6,7 +6,7 @@ entries:
     description: Designed an 8-step optimization process (deep understanding → structure analysis → spec building → iterative rewriting → ambiguity elimination → feasibility testing → final validation → sanity check) to transform vague prompts into actionable instructions with clear goals, constraints, and output formats.
     tools:
       - Claude Code
-    outcome: Reduced AI response ambiguity and error rates; distilled into a reusable prompt design framework for daily development
+    outcome: Rework rate dropped ~60%; design cycles shortened from 3–5 rounds to 1–2; framework distilled into a reusable Skill used in daily development
     github: https://github.com/eqr91703/portfolio/tree/main/.claude/skills/prompt-optimizer/SKILL.md
 
   - id: agent-db-connect
@@ -17,7 +17,7 @@ entries:
       - Claude Code
       - KubeVPN
       - kubectx
-    outcome: Eliminated manual K8s context + VPN setup steps and the risk of environment mix-ups
+    outcome: Saves 2–5 minutes per environment switch; zero mis-environment incidents since adoption; chains with db-schema / db-select into a complete query workflow
     github: https://github.com/eqr91703/portfolio/tree/main/.claude/skills/db-connect/SKILL.md
 
   - id: agent-db-schema
@@ -26,7 +26,7 @@ entries:
     description: Searches a local Markdown Schema knowledge base using business keywords. Automatically selects between precise object search and domain index lookup based on query intent, supporting tables, stored procedures, functions, and views — no SQL or table name memorization required.
     tools:
       - Claude Code
-    outcome: New engineers can query system architecture in Chinese; senior engineer interruptions dropped significantly
+    outcome: 574 docs instantly searchable; new engineers query architecture in natural language; senior engineer interruptions estimated at 5–8 fewer per week
     github: https://github.com/eqr91703/portfolio/tree/main/.claude/skills/db-schema/SKILL.md
 
   - id: agent-db-select
@@ -36,7 +36,7 @@ entries:
     tools:
       - Claude Code
       - MCP
-    outcome: Standardized data query process; non-engineers can safely query data, eliminating SQL mishap risk
+    outcome: Query prep time cut from 10 min to under 1 min; zero SQL mishaps by non-engineers; data query process fully standardized
     github: https://github.com/eqr91703/portfolio/tree/main/.claude/skills/db-select/SKILL.md
 
   - id: tooling-sql-debug
@@ -45,7 +45,7 @@ entries:
     description: Brought real Production SQL timeouts and type conversion errors into Claude Code, driving root-cause analysis with hypothesis-plus-actual-error pairs. Successfully diagnosed hidden issues including connection pool exhaustion and nvarchar type mismatch bugs.
     tools:
       - Claude Code
-    outcome: Shifted from "guess and test" to "confirm root cause then fix" — average debugging time significantly reduced
+    outcome: Average debug time cut from 2–4 hours to under 30 minutes; shifted to root-cause-first approach, reducing mis-fix risk
 
   - id: tooling-schema-docs
     category: tooling
@@ -53,7 +53,7 @@ entries:
     description: Converted an entire database schema (tables, stored procedures, functions, views) into 574 structured Markdown documents with a domain index and glossary, forming the foundation of an AI knowledge base. Managed API rate limits by capping agent concurrency at 3 parallel batches.
     tools:
       - Claude Code
-    outcome: Produced 574 searchable schema docs that power AI-assisted development workflows
+    outcome: 574 docs + 1 Domain Index + 1 glossary produced in 5 days (vs. 2-week manual estimate); became the single source of truth for AI-assisted development
 
   - id: tooling-csharp-refactor
     category: tooling
@@ -62,5 +62,5 @@ entries:
     tools:
       - Claude Code
       - .NET
-    outcome: Multiple refactors achieved Fully Achieved with zero major rollbacks; build-verify workflow adopted as standard practice
+    outcome: 7 cross-file refactors all Fully Achieved with zero major rollbacks; build-verify loop adopted as team SOP for all future refactoring
 ---

@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server';
 import { getAiCases } from '@/lib/content';
 import { AiCaseSection } from '@/components/projects/AiCaseSection';
 import { InsightsCard } from '@/components/projects/InsightsCard';
+import { AiShowcase } from '@/components/projects/AiShowcase';
 import { Lightbulb, Bot, Wrench } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import type { Metadata } from 'next';
@@ -37,6 +38,11 @@ export default async function ProjectsPage({
         <h1 className="text-3xl font-bold">{t('title')}</h1>
         <p className="mt-1 text-base text-muted-foreground">{t('subtitle')}</p>
       </div>
+
+      {/* AI 互動展示（Chat + Job Match）— 標題正下方 */}
+      <AiShowcase />
+
+      <Separator />
 
       {/* Prompt Engineering */}
       <AiCaseSection

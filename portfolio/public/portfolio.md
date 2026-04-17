@@ -9,7 +9,7 @@
 職稱：Senior ASP.NET(C#) 軟體工程師
 Tagline：Senior .NET 工程師
 Email：eqr91703@yahoo.com.tw
-GitHub：https://github.com/eqr91703
+GitHub：https://github.com/eqr91703/portfolio
 LinkedIn：https://www.linkedin.com/in/haowang-0517ab390
 
 具八年 C# / .NET 開發經驗，專注於高併發後端系統設計與資料處理效能優化。熟悉 SOLID 原則、非同步架構與分散式系統。善用 AI 工具輔助開發，持續追求系統穩定性與團隊效率提升。
